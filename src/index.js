@@ -18,6 +18,7 @@ class App extends React.Component {
 
     //helper method
     renderContent() {
+        
         if(this.state.errorMessage && !this.state.lat) {
             return (
                 <div>
