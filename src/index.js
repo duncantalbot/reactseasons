@@ -1,39 +1,38 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-//import SeasonDisplay from './SeasonDisplay';
+import SeasonDisplay from './SeasonDisplay';
 
+
+//App component borrows from React Base Component.
 class App extends React.Component {
 
-    //Always called when create component.
-    constructor(props) {
+    state = { lat : null, errorMessage : '' };
 
-        //Reference to parents constructor function. React.component
-        super(props);
-
-        //THIS IS THE ONLY TIME we do direct assigment to this.state
-        this.state = {lat: null, errorMessage: ''};
-
-        window.navigator.geolocation.getCurrentPosition(
-            (position) => {
-                this.setState({lat : position.coords.latitude});
-            },
-            (err) => {
-                this.setState({errorMessage : err.message});
-            }
+    componentDidMount() {
+        window.navigator.geolocation.getCurrentPosition (
+            (position) => this.setState({lat : position.coords.latitude}),
+            (err) => this.setState({errorMessage : err.message})
         );
     }
 
-    //React says we have to define render methid.
+    componentDidUpdate() {
+        console.log('My component was just updated - it rerendered!')
+    }
+
+    //React says we have to define a render method.
     render() {
-        if(this.state.errorMessage && !this.state.lat){
-            return <div>Error: {this.state.errorMessage}</div>
+        if(this.state.errorMessage && !this.state.lat) {
+            return (
+                <div>
+                    Error: {this.state.errorMessage}
+                </div>
+            )
         }
 
         if(!this.state.errorMessage && this.state.lat) {
-            return <div>Lattitude: {this.state.lat}</div>
+            return <SeasonDisplay lat={this.state.lat} />
         }
-
-            return <div>Loading!</div>
+        return <div>Loading!</div>
     };
 }
 
